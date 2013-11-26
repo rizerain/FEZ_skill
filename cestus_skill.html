@@ -1,0 +1,443 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- TemplateBeginEditable name="doctitle" -->
+<title>FEZスキルシミュレーター　セスタス</title>
+
+<SCRIPT src="cestus_skill.js"></SCRIPT>
+<!-- Obfuscated by www.htmlobfuscator.com -->
+
+<!-- TemplateEndEditable -->
+<!-- TemplateBeginEditable name="head" -->
+<!-- TemplateEndEditable -->
+<style type="text/css">
+<!--
+body {
+	font: 100%/1.4 "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS P Gothic", sans-serif;
+	background-color: #42413C;
+	margin: 0;
+	padding: 0;
+	color: #000;
+	line-height: 20px;
+}
+
+/* ~~ エレメント / タグセレクター ~~ */
+ul, ol, dl { /* ブラウザー間の相違により、リストの余白とマージンをゼロにすることをお勧めします。一貫性を保つために、量をここで指定するか、リストに含まれるリスト項目 (LI、DT、DD) で指定できます。より詳細なセレクターを記述しない限り、ここで指定する内容が .nav リストにも適用されることに注意してください。 */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6, p {
+	margin-top: 0;	 /* 上マージンを削除すると、マージンを含む div からマージンがはみ出す場合があるという問題を回避できます。残った下マージンにより、後続のエレメントからは離されます。 */
+	padding-right: 15px;
+	padding-left: 15px; /* div 自体ではなく div 内でエレメントの両側に余白を追加すると、ボックスモデル計算が不要になります。代わりに、両側に余白を指定した div をネストして使用することもできます。 */
+}
+a img { /* このセレクターは、一部のブラウザーでイメージをリンクで囲んだ場合にイメージの周囲に表示される初期設定の青いボーダーを削除します。 */
+	border: none;
+}
+
+/* ~~ サイトのリンクのスタイル付けは、ホバー効果を作成するセレクターグループも含め、この順序にする必要があります。~~ */
+a:link {
+	color: #42413C;
+	text-decoration: underline; /* 非常に特殊な表示方法でリンクをスタイル付けする場合を除き、一目で見分けられるように下線を指定することをお勧めします。 */
+}
+a:visited {
+	color: #6E6C64;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* このセレクターグループは、キーボードを使用するユーザーに対し、マウスを使用するユーザーと同じホバー効果を提供します。 */
+	text-decoration: none;
+}
+
+/* ~~ この固定幅コンテナが他のすべての div を囲みます。~~ */
+.container {
+	width: 960px;
+	background-color: #FFF;
+	margin: 0 auto; /* 幅に加え、両側を自動値とすることで、レイアウトが中央に揃います。 */
+	overflow: hidden; /* この宣言により .container は、含まれているフローティングカラムの範囲がどこまでかを認識してその範囲を含めるようになります。 */
+}
+
+/* ~~ レイアウトに使用するカラムです。~~ 
+
+1) 余白は、div の上部または下部にのみ配置されます。これらの div 内のエレメントには、それ自体に余白があるので、ボックスモデル計算を行う必要がありません。ただし、div 自体に両側の余白やボーダーを指定した場合、その値が加算されたものが合計幅になることに注意してください。div 内のエレメントの余白を削除し、さらにその div 内に、全体のデザインに必要な幅や余白を指定していない 2 つ目の div を追加することもできます。
+
+2) カラムはすべてフロートしているため、マージンは指定されていません。マージンを追加する必要がある場合は、フロート方向には指定しないでください (例えば、右フロートに設定した div の右マージン)。多くの場合、代わりに余白を使用できます。このルールに従わない場合は、div のルールに「display:inline」宣言を追加し、一部のバージョンの Internet Explorer でマージンが 2 倍になるバグを回避する必要があります。
+
+3) クラスはドキュメント内で複数回使用できるので (またエレメントには複数のクラスを適用できます)、カラムには ID ではなくクラス名が割り当てられます。例えば、必要に応じて 2 つのサイドバー div をスタックできます。クラスを各ドキュメントで一度しか使用しないのであれば、ユーザーの好みに応じて、クラス名を ID に変更することができます。
+
+4) ナビゲーションを左ではなく右に配置したい場合、これらのカラムを反対方向にフロートさせると (すべて左方向にする代わりに、すべて右方向に設定)、反転してレンダリングされます。HTML ソース内で div を移動する必要はありません。
+
+*/
+.sidebar1 {
+	float: left;
+	width: 180px;
+	height:800px;
+	background-color: #EADCAE;
+	padding-bottom: 10px;
+}
+.content {
+
+	padding: 10px 0;
+	width: 780px;
+	float: left;
+}
+
+/* ~~ このセレクターグループは、.content 内のリストに領域間隔を指定します。~~ */
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; /* この余白は、上述の見出しと段落ルールの右の余白を表します。下の余白はリスト内の他のエレメントとの間隔用に配置され、左の余白はインデント作成用に配置されています。これは必要に応じて調整できます。 */
+}
+
+/* ~~ ナビゲーションリストのスタイル付け (Spry などの事前作成済みのフライアウトメニューを使用する場合は削除できます) ~~ */
+ul.nav {
+	list-style: none; /* リストのマーカーを削除します。 */
+	border-top: 1px solid #666; /* リンク用の上部のボーダーを作成します。他のすべてのものは LI 上で下部のボーダーを使用して配置されます。 */
+	margin-bottom: 15px; /* 下のコンテンツのナビゲーション間の間隔を作成します。 */
+}
+ul.nav li {
+	border-bottom: 1px solid #666; /* ボタンの区切り線を作成します。 */
+}
+ul.nav a, ul.nav a:visited { /* これらのセレクターをグループ化することで、リンクのボタン表示が訪問後も確実に保持されます。 */
+	padding: 5px 5px 5px 15px;
+	display: block; /* リンクにブロックプロパティを指定し、リンクが含まれる LI 全体がリンクになるようにします。これにより、領域全体がマウスのクリックに反応するようになります。 */
+	width: 160px;  /*この幅により、IE6 でボタン全体をクリックできるようになります。IE6 をサポートする必要がない場合は削除できます。適切な幅を計算するには、サイドバーコンテナの幅からそのリンクの余白を減算します。 */
+	text-decoration: none;
+	background-color: #C6D580;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* マウスを使用する場合もキーボードを使用する場合も、背景色とテキストカラーを変更します。 */
+	background-color: #ADB96E;
+	color: #FFF;
+}
+
+/* ~~ その他の float/clear クラス ~~ */
+.fltrt {  /* このクラスを使用すると、ページ内でエレメントを右にフローティングさせることができます。フローティングさせるエレメントは、ページ内で横に並べて表示するエレメントの前に指定する必要があります。 */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* このクラスを使用すると、ページ内でエレメントを左にフローティングさせることができます。フローティングさせるエレメントは、ページ内で横に並べて表示するエレメントの前に指定する必要があります。 */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* このクラスは、.container で overflow:hidden が削除されている場合に、<br /> または空の div で、フローティングさせる最後の div に続く最後のエレメントとして (#container 内に) 配置できます。 */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+-->
+</style></head>
+
+<body>
+
+
+<div class="container">
+<div class="sidebar1">
+    <ul class="nav">
+      <li><a href="#">ウォーリア（工事中）</a></li>
+      <li><a href="#">ソーサラ（工事中）</a></li>
+      <li><a href="#">スカウト（工事中）</a></li>
+      <li><a href="#">フェンサー（工事中）</a></li>
+      <li><a href="#">セスタス</a></li>
+
+    </ul>
+    <p> </p>
+<!-- end .sidebar1 --></div>
+  <div class="content">
+<h1>セスタススキルシミュレーター</h1>
+<p>残りスキルポイントは<span id="output">40</span>です。<br>
+必要レベルは<span id="level">1</span>です。
+<input type="reset" value="リセット" onClick="reset()" >
+</p>
+<table width="750" height="56" border="0">
+  <tr>
+    <td width="17" height="52">&nbsp;</td>
+    <td width="219"><table width="175" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%BB%A5%B9%A5%BF%A5%B9%B4%F0%CB%DC%B9%B6%B7%E2.PNG" alt="" width="31" height="31" /></td>
+        <td width="128">基本攻撃</td>
+        </tr>
+    </table></td>
+    <td width="16">&nbsp;</td>
+    <td width="220"><table width="175" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%A8%A5%F3%A5%C0%A1%BC%A5%EC%A5%A4%A5%C9.jpg" alt="" width="31" height="31" /></td>
+        <td width="128">エンダーレイド</td>
+        </tr>
+    </table></td>
+    <td width="18">&nbsp;</td>
+    <td width="234">&nbsp;</td>
+  </tr>
+</table>
+<hr size="5" />
+<table width="750" height="164" border="0">
+  <tr>
+    <td width="17" height="52">&nbsp;</td>
+    <td width="219"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%B7%A5%E3%A5%C3%A5%C8%A5%A2%A5%A6%A5%C8.PNG" alt="" width="31" height="31" /></td>
+        <td width="128">シャットアウト</td>
+        <td width="38">	<form  style="display: inline"name="shutout" method="get" id="id_shut">
+		<select name="n_shut" id="s_shut" onchange="f_shut(id_shut);">
+			<option value="0">0</option>
+			<option value="2">1</option>
+		</select>
+	</form></td>
+      </tr>
+    </table></td>
+    <td width="16">&nbsp;</td>
+    <td width="220"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%CF%A1%BC%A5%C9%A5%EC%A5%A4%A5%F3%A5%D5%A5%A9%A1%BC%A5%B9.jpg" alt="" width="31" height="31" /></td>
+        <td width="128">ハードレイン<br />
+          フォース</td>
+        <td width="38">	<form name="hardrainforce" method="get" id="id_hard">
+          <select name="n_hard" id="s_hard" onchange="f_hard(id_hard);">
+			<option value="0">0</option>
+			<option value="2">1</option>
+		</select>
+	</form></td>
+      </tr>
+    </table></td>
+    <td width="18">&nbsp;</td>
+    <td width="234">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="52">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><table width="219" height="48" border="1">
+      <tr>
+        <td width="31" height="40"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%B5%A5%AF%A5%EA%A5%D5%A5%A1%A5%A4%A5%B9.jpg" alt="" width="31" height="31" /></td>
+        <td width="130">サクリファイス</td>
+        <td width="34">	<form name="sacrifice"method="get" id="id_sacri">
+		<select name="n_sacri" id="s_sacri" onchange="f_sacri(id_sacri);">
+			<option value="0">0</option>
+			<option value="2">1</option>
+		</select>
+	</form></td>
+      </tr>
+    </table></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="52">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><table width="220" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%BF%A5%EF%A1%BC%A5%C9%A5%DF%A5%CD%A1%BC%A5%B7%A5%E7%A5%F3.jpg" alt="" width="31" height="31" /></td>
+        <td width="129">タワー<br />
+          ドミネション</td>
+        <td>	<form name="towerdomination" method="get" id="id_tower">
+		<select name="n_tower" id="s_tower" onchange="f_tower(id_tower);">
+			<option value="0">0</option>
+			<option value="2">1</option>
+		</select>
+	</form></td>
+      </tr>
+    </table></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<HR size="5">
+<table width="750" height="129" border="0">
+  <tr>
+    <td width="17" height="62">&nbsp;</td>
+    <td width="219"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%A4%A5%F3%A5%C6%A5%F3%A5%B9%A5%D5%A5%A1%A5%A4.PNG" alt="" width="31" height="31" /></td>
+        <td width="128">インテンスファイ</td>
+        <td width="38"><form name="intencefai" method="get" id="id_inte">
+          <select name="n_inte" id="s_inte" onchange="f_inte(id_inte);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td width="">&nbsp;</td>
+    <td width="219"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%CE%A5%C3%A5%AF%A5%A4%A5%F3%A5%D1%A5%AF%A5%C8.jpg" alt="" width="31" height="31" /></td>
+        <td width="128">ノックインパクト</td>
+        <td width="38"><form name="knockimpact" method="get" id="id_knock2">
+          <select name="n_knock2" id="n_knock" onchange="f_knock(id_knock);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+          </select>
+        </form></td>
+      </tr>
+    </table></td>
+    <td width="18">&nbsp;</td>
+    <td width="234"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%A2%A1%BC%A5%B9%A5%D0%A5%A4%A5%F3%A5%C9.jpg" alt="" width="31" height="31" /></td>
+        <td width="130">アースバインド</td>
+        <td width="38"><form name="earthbind" method="get" id="id_earth">
+          <select name="n_earth" id="s_earth" onchange="f_earth(id_earth);">
+            <option value="0">0</option>
+            <option value="3">1</option>
+            <option value="5">2</option>
+            <option value="6">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><table width="219" height="48" border="1">
+      <tr>
+        <td width="31" height="40"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%BD%A5%EA%A5%C3%A5%C9%A5%B9%A5%C8%A5%E9%A5%A4%A5%AF.jpg" alt="" width="31" height="31" /></td>
+        <td width="145">ソリッド<br />
+          ストライク</td>
+        <td width="34"><form name="solidstrike" method="get" id="id_solid">
+          <select name="n_solid" id="s_solid" onchange="f_solid(id_solid);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td>&nbsp;</td>
+    <td><table width="220" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%B7%A5%E7%A5%C3%A5%AF%A5%A6%A5%A7%A5%A4%A5%D6.jpg" alt="" width="31" height="31" /></td>
+        <td width="129">ショックウェイブ</td>
+        <td width="38"><form name="shockwave" method="get" id="id_shock">
+          <select name="n_shock" id="s_shock" onchange="f_shock(id_shock);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="4">2</option>
+            <option value="6">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+  </tr>
+</table>
+<HR size="5">
+<table width="750" height="164" border="0">
+  <tr>
+    <td width="17" height="52">&nbsp;</td>
+    <td width="219"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%C9%A5%EC%A5%A4%A5%F3%A5%AF%A5%ED%A1%BC.PNG" alt="" width="31" height="31" /></td>
+        <td width="128">ドレインクロー</td>
+        <td width="38"><form name="draincraw" method="get" id="id_drain">
+          <select name="n_drain" id="s_drain" onchange="f_drain(id_drain);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td width="16">&nbsp;</td>
+    <td width="220"><table width="219" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%DB%A1%BC%A5%CD%A5%C3%A5%C8%A5%B9%A5%C6%A5%A3%A5%F3%A5%B0.PNG" alt="" width="31" height="31" /></td>
+        <td width="128">ホーネット<br />
+          スティング</td>
+        <td width="38"><form name="hornetsting" method="get" id="id_hornet">
+          <select name="n_hornet" id="s_hornet" onchange="f_hornet(id_hornet);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td width="18">&nbsp;</td>
+    <td width="234"><table width="221" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%B2%A5%A4%A5%B6%A1%BC%A5%B9%A5%DE%A5%C3%A5%B7%A5%E5.PNG" alt="" width="31" height="31" /></td>
+        <td width="130">ゲイザー<br />
+          スマッシュ</td>
+        <td width="38"><form name="gazersmash" method="get" id="id_gazer">
+          <select name="n_gazer" id="s_gazer" onchange="f_gazer(id_gazer);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="4">2</option>
+            <option value="6">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="52">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><table width="219" height="48" border="1">
+      <tr>
+        <td width="31" height="40"><img src="http://fewiki.jp/index.php?plugin=ref&page=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&src=%A5%CF%A1%BC%A5%E0%A5%A2%A5%AF%A5%C6%A5%A3%A5%D9%A5%A4%A5%C8.PNG" alt="" width="31" height="31" /></td>
+        <td width="130">ハーム<br />
+          アクティベート</td>
+        <td width="34"><form name="harmactivate" method="get" id="id_harm">
+          <select name="n_harm" id="s_harm" onchange="f_harm(id_harm);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="52">&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><table width="220" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%D0%A5%C3%A5%AF%A5%CF%A5%F3%A5%C9%A5%D6%A5%ED%A5%A6.jpg" alt="" width="31" height="31" /></td>
+        <td width="129">バックハンド<br />
+          ブロー</td>
+        <td><form name="backhandbrow" method="get" id="id_back">
+          <select name="n_back" id="s_back" onchange="f_back(id_back);">
+            <option value="0">0</option>
+            <option value="2">1</option>
+            <option value="3">2</option>
+            <option value="4">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+    <td>&nbsp;</td>
+    <td><table width="220" height="50" border="1">
+      <tr>
+        <td width="31"><img src="http://fewiki.jp/index.php?plugin=attach&refer=Skill%2F%A5%BB%A5%B9%A5%BF%A5%B9%A5%B9%A5%AD%A5%EB&openfile=%A5%B5%A5%A4%A5%AF%A5%ED%A5%F3%A5%C7%A5%A3%A5%B6%A5%B9%A5%BF%A1%BC.jpg" alt="" width="31" height="31" /></td>
+        <td width="129">サイクロン<br />
+          ディザスター</td>
+        <td><form name="cyclonedisaster" method="get" id="id_cyclone">
+          <select name="n_cyclone" id="s_cyclone" onchange="f_cyclone(id_cyclone);">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="3">2</option>
+            <option value="6">3</option>
+            </select>
+        </form></td>
+        </tr>
+    </table></td>
+  </tr>
+</table>
+<hr size="5" />
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</body>
+</html>
